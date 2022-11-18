@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTI Dev Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <style>
+      hr {
+        margin: 50px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>LTI Dev Tool</h1>
+      <p>Current State:
+        <strong>LTI Authentification Active</strong>
+      </p>
+      <hr>
+      <p>LTI Key:
+        <strong>{{ key }}</strong>
+      </p>
+      <p>LTI Secret:
+        <strong>{{ secret }}</strong>
+      </p>
+      <hr>
+      <p>User ID:
+        <strong>{{ userId }}</strong>
+      </p>
+      <p>Context ID:
+        <strong>{{ contextId }}</strong>
+      </p>
+      <hr>
+      <div id="sender">
+        <div class="form-floating mb-3">
+          <input oninput="update()" type="range" min="0" max="100" class="form-control form-range" id="outcomeInput" value="{{ currentOutcome | times: 100 }}">
+          <label for="outcomeInput">Set Outcome to 0 %</label>
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" id="sendOutcomeBtn" onclick="send()" type="button">Send</button>
+        </div>
+        <script>
+          function update() {
+            const label = document.querySelector('[for="outcomeInput"]');
+            const value = document.querySelector('#outcomeInput').value;
+            label.innerText = `Set Outcome to ${
+              value
+            } %`;
+          }
+          function send(value, callback) {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+              if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200 || xmlhttp.status == 204) {
+                  callback()
+                } else {
+                  callback(`Status ${
+                    xmlhttp.status
+                  }: ${
+                    xmlhttp.responseText
+                  }`);
+                }
+              }
+            }
+            xmlhttp.open('GET', 'outcome/' + value, true);
+            xmlhttp.send();
+          }
+          const sendOutcome = document.querySelector('#sendOutcomeBtn')
+          const outcomeInput = document.querySelector('#outcomeInput')
+          if (sendOutcome) {
+            sendOutcome.addEventListener('click', () => {
+              const value = parseInt(outcomeInput.value) / 100;
+              send(value, function(err) {
+                const msg = document.createElement('div');
+                msg.className = 'alert alert-dismissible fade show mt-2 mb-2';
+                msg.setAttribute('role', 'alert');
+                if (! err) {
+                  msg.innerText = `Changed to ${
+                    value * 100
+                  } %`;
+                  msg.classList.add('alert-success');
+                } else {
+                  msg.innerText = err;
+                  msg.classList.add('alert-danger');
+                }
+                const btn = document.createElement('button');
+                btn.setAttribute('type', 'button');
+                btn.setAttribute('data-bs-dismiss', 'alert');
+                btn.setAttribute('aria-label', 'butCloseton');
+                btn.className = 'btn-close';
+                msg.append(btn);
+                document.querySelector('#sender').append(msg);
+              })
+            })
+          }
+          update();
+        </script>
+      </div>
+      <hr>
+      <p>LTI Payload:</p>
+      <pre><code class="language-json">{{ltiPayload}}</code></pre>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>

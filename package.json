@@ -1,0 +1,19 @@
+{
+  "name": "simple-lti",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "DEBUG=simple:* node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^2.6.9",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "ims-lti": "^3.0.2",
+    "liquidjs": "^9.42.1"
+  }
+}
