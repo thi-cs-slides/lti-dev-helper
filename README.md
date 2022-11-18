@@ -2,6 +2,10 @@
 
 Use to see, whats happening and send results to LTI consumer.
 
+## Install Dependencies
+
+`npm i`
+
 ## Start
 
 `npm run start`
