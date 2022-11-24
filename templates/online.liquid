@@ -51,6 +51,9 @@
             } %`;
           }
           function send(value, callback) {
+            if (!value) 
+                value = document.getElementById('outcomeInput').value;
+            console.debug('value = ' + value);
             const xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
               if (xmlhttp.readyState == 4) {
