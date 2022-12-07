@@ -52,7 +52,7 @@
           }
           function send(value, callback) {
             if (!value) 
-                value = document.getElementById('outcomeInput').value;
+                return;
             console.debug('value = ' + value);
             const xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
