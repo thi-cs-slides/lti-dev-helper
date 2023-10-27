@@ -43,7 +43,7 @@ const config = {
     },
     lti: {
         secret: process.env.LTI_SECRET || DEFAULT_SECRET,
-        key: process.env.LTI_SECRET || DEFAULT_KEY
+        key: process.env.LTI_KEY || process.env.LTI_SECRET || DEFAULT_KEY
     }
 };
 
