@@ -119,7 +119,7 @@ const startApp = function() {
                         debug(`Received existing outcome: ${result}`);
                     }
                     req.session.currentOutcome = result || 0;
-                    res.redirect(301, '/');
+                    res.redirect(301, config.basePath + '/');
                 })
             } else {
                 debug(`Error validating request for ${consumerKey}`, err);
