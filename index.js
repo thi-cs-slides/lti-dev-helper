@@ -36,6 +36,7 @@ const config = {
     port: process.env.PORT || 4000,
     secret: process.env.SECRET || DEFAULT_SECRET,
     trusted: (ip) => ips.length == 0 ? true : ips.indexOf(ip) != -1,
+    basePath: process.env.BASE_PATH || '',
     cookie: {
         secure: process.env.COOKIE_SECURE || false,
         maxAge: process.env.COOKIE_MAX_AGE || 60 * 60 * 24 * 1000
@@ -85,9 +86,9 @@ const startApp = function() {
         }
     });
 
-    app.use('/version', (req, res) => res.send({version: require('./package.json').version}));
+    app.use(config.basePath + '/version', (req, res) => res.send({version: require('./package.json').version}));
 
-    app.post('/lti', (req, res, next) => {
+    app.post(config.basePath + '/lti', (req, res, next) => {
         // Get Information from LTI-Payload
         const contextId = req.body.context_id;
         const consumerKey = req.body.oauth_consumer_key;
@@ -127,7 +128,7 @@ const startApp = function() {
         });
     });
 
-    app.get('/outcome/:value', (req, res, next) => {
+    app.get(config.basePath + '/outcome/:value', (req, res, next) => {
         const value = Math.max(0.0, Math.min(1.0, parseFloat(req.params.value)));
         const outcomeData = req.session.outcomeData;
         if(!outcomeData) {
@@ -146,7 +147,7 @@ const startApp = function() {
             }
         });
     });
-    app.get('/', (req, res, next) => {
+    app.get(config.basePath + '/', (req, res, next) => {
         if(req.session.userId) {
             res.render('online', {
                 key: config.lti.key,
