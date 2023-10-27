@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG=simple:* node index.js"
+    "start": "DEBUG=simple:* node index.js",
+    "debug": "DEBUG=simple:* node --inspect=0.0.0.0:9229 index.js"
   },
   "keywords": [],
   "author": "",
