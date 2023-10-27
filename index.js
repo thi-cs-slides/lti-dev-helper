@@ -16,6 +16,14 @@ function OutcomeRecreator(data) {
 }
 OutcomeRecreator.prototype = ltiOutcome.OutcomeService.prototype;
 
+if(process.env.DEV) {
+    const orgProcessor = OutcomeRecreator.prototype._process_response;
+    OutcomeRecreator.prototype._process_response = function(body, callback) {
+        debug('Outcome-Response: ' + body);
+        return orgProcessor.call(this, body, callback);
+    }
+}
+
 function sendOutcome(value, outcomeConfig, callback) {
     const outcome = new OutcomeRecreator(outcomeConfig);
     outcome.send_replace_result(value, callback);
